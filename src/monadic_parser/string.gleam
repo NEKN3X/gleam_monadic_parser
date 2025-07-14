@@ -32,7 +32,7 @@ pub fn is_alpha_num(s: String) -> Bool {
 
 pub fn is_space(s: String) -> Bool {
   case s {
-    " " | "\t" | "\n" -> True
+    " " | "　" | "\t" | "\n" -> True
     _ -> False
   }
 }
