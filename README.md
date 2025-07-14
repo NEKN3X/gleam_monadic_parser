@@ -12,7 +12,7 @@ import gleam/option.{Some}
 import sample
 
 pub fn main() -> Nil {
-  sample.eval("2 + 3)
+  sample.eval("2 + 3")
 }
 ```
 
