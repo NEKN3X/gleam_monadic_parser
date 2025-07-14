@@ -1,6 +1,6 @@
 import gleam/list
 import gleam/string
-import simple/string as str
+import monadic_parser/string as str
 
 /// A character type that wraps a single character string.
 pub opaque type Char {

@@ -1,7 +1,7 @@
 import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import simple/char.{type Char}
+import monadic_parser/char.{type Char}
 
 pub type Parser(a) {
   P(parser: fn(String) -> Option(#(a, String)))

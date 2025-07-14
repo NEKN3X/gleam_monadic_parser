@@ -1,5 +1,5 @@
 import gleam/option.{Some}
-import monadic_parser.{type Parser} as parser
+import monadic_parser/parser.{type Parser}
 
 pub fn expr() -> Parser(Int) {
   use t <- parser.bind(term())

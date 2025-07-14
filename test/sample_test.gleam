@@ -1,4 +1,4 @@
-import sample
+import monadic_parser/sample
 
 pub fn eval_test() {
   assert sample.eval("2*3+4") == Ok(10)
