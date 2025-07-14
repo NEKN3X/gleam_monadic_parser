@@ -9,7 +9,7 @@ gleam add monadic_parser@1
 
 ```gleam
 import gleam/option.{Some}
-import sample
+import monadic_parser/sample
 
 pub fn main() -> Nil {
   sample.eval("2 + 3")
