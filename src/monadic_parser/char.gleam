@@ -8,15 +8,8 @@ pub opaque type Char {
 }
 
 /// Create a new Char from a single character string.
-pub fn new(i: String) -> Result(Char, String) {
-  case string.length(i) {
-    1 -> Ok(Char(i))
-    _ -> Error("Invalid character length")
-  }
-}
-
-/// Create a Char from a string without checking its length.
-pub fn unsafe(i: String) -> Char {
+pub fn new(i: String) -> Char {
+  assert string.length(i) == 1
   Char(i)
 }
 
@@ -97,5 +90,41 @@ pub fn is_alpha_num(c: Char) -> Bool {
 pub fn is_space(c: Char) -> Bool {
   case c {
     Char(s) -> str.is_space(s)
+  }
+}
+
+pub fn is_full_space(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_full_space(s)
+  }
+}
+
+pub fn is_tab(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_tab(s)
+  }
+}
+
+pub fn is_newline(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_newline(s)
+  }
+}
+
+pub fn is_cr(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_cr(s)
+  }
+}
+
+pub fn is_crlf(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_crlf(s)
+  }
+}
+
+pub fn is_blank(c: Char) -> Bool {
+  case c {
+    Char(s) -> str.is_blank(s)
   }
 }

@@ -6,12 +6,12 @@ import monadic_parser/parser.{parse}
 pub fn item_test() {
   let p = parser.item()
   assert parse(p, "") == None
-  assert parse(p, "abc") == Some(#(char.unsafe("a"), "bc"))
+  assert parse(p, "abc") == Some(#(char.new("a"), "bc"))
 }
 
 pub fn map_test() {
   let p = parser.item() |> parser.map(char.uppercase, _)
-  assert parse(p, "abc") == Some(#(char.unsafe("A"), "bc"))
+  assert parse(p, "abc") == Some(#(char.new("A"), "bc"))
   assert parse(p, "") == None
 }
 
@@ -29,7 +29,7 @@ pub fn apply_test() {
     |> parser.apply(parser.item())
   }
   assert parse(three, "abcdef")
-    == Some(#(#(char.unsafe("a"), char.unsafe("c")), "def"))
+    == Some(#(#(char.new("a"), char.new("c")), "def"))
   assert parse(three, "ab") == None
 }
 
@@ -41,7 +41,7 @@ pub fn bind_test() {
     parser.pure(#(x, z))
   }
   assert parse(three, "abcdef")
-    == Some(#(#(char.unsafe("a"), char.unsafe("c")), "def"))
+    == Some(#(#(char.new("a"), char.new("c")), "def"))
   assert parse(three, "ab") == None
 }
 
@@ -51,36 +51,36 @@ pub fn empty_test() {
 }
 
 pub fn alt_test() {
-  let p = parser.alt(_, parser.pure(char.unsafe("d")))
+  let p = parser.alt(_, parser.pure(char.new("d")))
 
-  assert parse(parser.item() |> p, "abc") == Some(#(char.unsafe("a"), "bc"))
-  assert parse(parser.empty() |> p, "abc") == Some(#(char.unsafe("d"), "abc"))
+  assert parse(parser.item() |> p, "abc") == Some(#(char.new("a"), "bc"))
+  assert parse(parser.empty() |> p, "abc") == Some(#(char.new("d"), "abc"))
 }
 
 pub fn sat_test() {
   let a = parser.digit()
-  assert parse(a, "123abc") == Some(#(char.unsafe("1"), "23abc"))
+  assert parse(a, "123abc") == Some(#(char.new("1"), "23abc"))
   assert parse(a, "abc") == None
   let b = parser.lower()
-  assert parse(b, "abc") == Some(#(char.unsafe("a"), "bc"))
+  assert parse(b, "abc") == Some(#(char.new("a"), "bc"))
   assert parse(b, "ABC") == None
   let c = parser.upper()
-  assert parse(c, "ABC") == Some(#(char.unsafe("A"), "BC"))
+  assert parse(c, "ABC") == Some(#(char.new("A"), "BC"))
   assert parse(c, "abc") == None
   let d = parser.letter()
-  assert parse(d, "abc") == Some(#(char.unsafe("a"), "bc"))
-  assert parse(d, "ABC") == Some(#(char.unsafe("A"), "BC"))
+  assert parse(d, "abc") == Some(#(char.new("a"), "bc"))
+  assert parse(d, "ABC") == Some(#(char.new("A"), "BC"))
   assert parse(d, "123") == None
   let e = parser.alpha_num()
-  assert parse(e, "abc") == Some(#(char.unsafe("a"), "bc"))
-  assert parse(e, "ABC") == Some(#(char.unsafe("A"), "BC"))
-  assert parse(e, "123") == Some(#(char.unsafe("1"), "23"))
+  assert parse(e, "abc") == Some(#(char.new("a"), "bc"))
+  assert parse(e, "ABC") == Some(#(char.new("A"), "BC"))
+  assert parse(e, "123") == Some(#(char.new("1"), "23"))
   assert parse(e, "!@#") == None
 }
 
 pub fn char_test() {
-  let p = parser.char(char.unsafe("a"))
-  assert parse(p, "abc") == Some(#(char.unsafe("a"), "bc"))
+  let p = parser.char(char.new("a"))
+  assert parse(p, "abc") == Some(#(char.new("a"), "bc"))
 }
 
 pub fn string_test() {

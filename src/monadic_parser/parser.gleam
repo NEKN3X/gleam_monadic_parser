@@ -146,9 +146,14 @@ pub fn space() -> Parser(Nil) {
   pure(Nil)
 }
 
+pub fn blank() -> Parser(Nil) {
+  use _ <- bind(many(sat(char.is_blank)))
+  pure(Nil)
+}
+
 pub fn int() -> Parser(Int) {
   {
-    use _ <- bind(char(char.unsafe("-")))
+    use _ <- bind(char(char.new("-")))
     use n <- bind(nat())
     pure(-n)
   }
@@ -157,9 +162,9 @@ pub fn int() -> Parser(Int) {
 
 // 前後の空白を無視する
 pub fn token(p: Parser(a)) -> Parser(a) {
-  use _ <- bind(space())
+  use _ <- bind(blank())
   use v <- bind(p)
-  use _ <- bind(space())
+  use _ <- bind(blank())
   pure(v)
 }
 
