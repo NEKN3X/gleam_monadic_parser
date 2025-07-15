@@ -75,6 +75,10 @@ pub fn sat(p: fn(Char) -> Bool) {
   }
 }
 
+pub fn not(p: fn(Char) -> Bool) {
+  sat(fn(x) { !p(x) })
+}
+
 pub fn digit() {
   sat(char.is_digit)
 }
@@ -124,6 +128,50 @@ pub fn some(x: Parser(a)) -> Parser(List(a)) {
   |> apply(defer(fn() { many(x) }))
 }
 
+pub fn nth_of(n: Int, p: Parser(a)) -> Parser(List(a)) {
+  case n {
+    0 -> pure([])
+    m if m < 0 -> empty()
+    m -> {
+      use x <- bind(p)
+      use xs <- bind(nth_of(m - 1, p))
+      pure(list.append([x], xs))
+    }
+  }
+}
+
+pub fn min_of(n: Int, p: Parser(a)) -> Parser(List(a)) {
+  case n {
+    m if m <= 0 -> many(p)
+    m -> {
+      use x <- bind(p)
+      use xs <- bind(min_of(m - 1, p))
+      pure(list.append([x], xs))
+    }
+  }
+}
+
+pub fn max_of(n: Int, p: Parser(a)) -> Parser(List(a)) {
+  range_of(0, n, p)
+}
+
+pub fn range_of(min: Int, max: Int, p: Parser(a)) -> Parser(List(a)) {
+  case min, max {
+    min, max if min > max -> empty()
+    min, max if min == max -> just_nth_of(min, p)
+    _, 0 -> pure([])
+    min, max -> nth_of(max, p) |> alt(range_of(min, max - 1, p))
+  }
+}
+
+pub fn just_nth_of(n: Int, p: Parser(a)) -> Parser(List(a)) {
+  use x <- bind(many(p))
+  case x |> list.length {
+    len if len == n -> pure(x)
+    _ -> empty()
+  }
+}
+
 // 小文字で始まり、0個以上のアルファベットか数字が続く
 pub fn ident() -> Parser(String) {
   use x <- bind(lower())
@@ -140,14 +188,22 @@ pub fn nat() {
   }
 }
 
+pub fn space() {
+  sat(char.is_space)
+}
+
 // 空白文字、タブ文字または改行文字が一つ以上繰り返される
-pub fn space() -> Parser(String) {
-  use x <- bind(many(sat(char.is_space)))
+pub fn many_space() -> Parser(String) {
+  use x <- bind(many(space()))
   pure(x |> char.join)
 }
 
-pub fn blank() -> Parser(String) {
-  use x <- bind(many(sat(char.is_blank)))
+pub fn blank() {
+  sat(char.is_blank)
+}
+
+pub fn many_blank() -> Parser(String) {
+  use x <- bind(many(blank()))
   pure(x |> char.join)
 }
 
@@ -162,9 +218,9 @@ pub fn int() -> Parser(Int) {
 
 // 前後の空白を無視する
 pub fn token(p: Parser(a)) -> Parser(a) {
-  use _ <- bind(blank())
+  use _ <- bind(many_blank())
   use v <- bind(p)
-  use _ <- bind(blank())
+  use _ <- bind(many_blank())
   pure(v)
 }
 

@@ -98,8 +98,63 @@ pub fn many_some_test() {
   assert parse(a, "abc def") == Some(#("abc", " def"))
   let b = parser.nat()
   assert parse(b, "123 abc") == Some(#(123, " abc"))
-  let c = parser.space()
+  let c = parser.many_space()
   assert parse(c, "   abc") == Some(#("   ", "abc"))
+}
+
+pub fn nth_of_test() {
+  let p = {
+    use x <- parser.bind(parser.nth_of(3, parser.digit()))
+    parser.pure(x |> char.join)
+  }
+  assert parse(p, "1234abc") == Some(#("123", "4abc"))
+  assert parse(p, "123abc") == Some(#("123", "abc"))
+  assert parse(p, "12abc") == None
+}
+
+pub fn min_of_test() {
+  let p = {
+    use x <- parser.bind(parser.min_of(3, parser.digit()))
+    parser.pure(x |> char.join)
+  }
+  assert parse(p, "1234abc") == Some(#("1234", "abc"))
+  assert parse(p, "123abc") == Some(#("123", "abc"))
+  assert parse(p, "12abc") == None
+  assert parse(p, "1abc") == None
+}
+
+pub fn max_of_test() {
+  let p = {
+    use x <- parser.bind(parser.max_of(3, parser.digit()))
+    parser.pure(x |> char.join)
+  }
+  assert parse(p, "1234abc") == Some(#("123", "4abc"))
+  assert parse(p, "12abc") == Some(#("12", "abc"))
+  assert parse(p, "1abc") == Some(#("1", "abc"))
+  assert parse(p, "abc") == Some(#("", "abc"))
+}
+
+pub fn just_nth_of_test() {
+  let p = {
+    use x <- parser.bind(parser.just_nth_of(3, parser.digit()))
+    parser.pure(x |> char.join)
+  }
+  assert parse(p, "1234abc") == None
+  assert parse(p, "123abc") == Some(#("123", "abc"))
+  assert parse(p, "12") == None
+  assert parse(p, "1") == None
+  assert parse(p, "") == None
+}
+
+pub fn range_of_test() {
+  let p = {
+    use x <- parser.bind(parser.range_of(2, 4, parser.digit()))
+    parser.pure(x |> char.join)
+  }
+  assert parse(p, "12345abc") == Some(#("1234", "5abc"))
+  assert parse(p, "12abc") == Some(#("12", "abc"))
+  assert parse(p, "1abc") == None
+  assert parse(p, "abc") == None
 }
 
 pub fn int_test() {
