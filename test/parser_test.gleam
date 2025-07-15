@@ -99,7 +99,7 @@ pub fn many_some_test() {
   let b = parser.nat()
   assert parse(b, "123 abc") == Some(#(123, " abc"))
   let c = parser.space()
-  assert parse(c, "   abc") == Some(#(Nil, "abc"))
+  assert parse(c, "   abc") == Some(#("   ", "abc"))
 }
 
 pub fn int_test() {

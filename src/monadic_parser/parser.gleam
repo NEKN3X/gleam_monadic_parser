@@ -141,14 +141,14 @@ pub fn nat() {
 }
 
 // 空白文字、タブ文字または改行文字が一つ以上繰り返される
-pub fn space() -> Parser(Nil) {
-  use _ <- bind(many(sat(char.is_space)))
-  pure(Nil)
+pub fn space() -> Parser(String) {
+  use x <- bind(many(sat(char.is_space)))
+  pure(x |> char.join)
 }
 
-pub fn blank() -> Parser(Nil) {
-  use _ <- bind(many(sat(char.is_blank)))
-  pure(Nil)
+pub fn blank() -> Parser(String) {
+  use x <- bind(many(sat(char.is_blank)))
+  pure(x |> char.join)
 }
 
 pub fn int() -> Parser(Int) {
