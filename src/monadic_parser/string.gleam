@@ -73,12 +73,7 @@ pub fn is_crlf(s: String) -> Bool {
 }
 
 pub fn is_blank(s: String) -> Bool {
-  is_space(s)
-  || is_full_space(s)
-  || is_tab(s)
-  || is_newline(s)
-  || is_cr(s)
-  || is_crlf(s)
+  is_space(s) || is_full_space(s) || is_tab(s)
 }
 
 pub fn split_at(s: String, index: Int) -> #(String, String) {
