@@ -80,3 +80,13 @@ pub fn is_blank(s: String) -> Bool {
   || is_cr(s)
   || is_crlf(s)
 }
+
+pub fn split_at(s: String, index: Int) -> #(String, String) {
+  case string.slice(s, 0, index) {
+    left -> {
+      case string.drop_start(s, index) {
+        right -> #(left, right)
+      }
+    }
+  }
+}
