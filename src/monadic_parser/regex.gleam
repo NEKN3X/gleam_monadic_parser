@@ -3,7 +3,7 @@ import gleam/regexp
 import gleam/string
 import monadic_parser/parser.{P}
 
-pub fn token(re: regexp.Regexp) {
+pub fn rematch(re: regexp.Regexp) {
   P(fn(input) {
     case regexp.scan(re, input) {
       [match, ..] -> {
